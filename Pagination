@@ -1,0 +1,58 @@
+
+// here lastPosition or loadSize initialization in globale 
+
+//listStri is total list
+
+//item add in newlist
+
+//by default showing 6 items
+ for (int i = 0; i <= 5; i++) {
+            newlistStri.add(listStri.get(i));
+            lastPosition=i+1;
+        }
+
+
+recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                LinearLayoutManager layoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
+                int firstVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+                if (firstVisibleItemPosition==lastPosition-1){
+                    loadMore();
+                }
+            }
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+      
+        private void loadMore() {
+        int lisSize=listStri.size();
+        int lastSize=lisSize-lastPosition;
+        if (lastSize<=5 ) {
+            if (lastSize>0){
+                for (int i=lastPosition; i<=lisSize-1;i++){
+                    newlistStri.add(listStri.get(i));
+
+                    if (i==lisSize-1){
+                        lastPosition=i+1;
+                    }
+                    contactAdapter.notifyDataSetChanged();
+                }
+            }
+            else {
+                Toast.makeText(getActivity(), "list finished", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            loadSize=  lastPosition + 5;
+            for (int i = lastPosition; i <= loadSize; i++) {
+                newlistStri.add(listStri.get(i));
+                if (i == loadSize) {
+                    lastPosition = i+1;
+                }
+                contactAdapter.notifyDataSetChanged();
+            }
+        }
+    }
